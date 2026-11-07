@@ -1,2 +1,2 @@
 # Tarea
-Plataforma facil de majear para llevar el control de las tareas 
+Plataforma facil de manejear para llevar el control de las tareas 
