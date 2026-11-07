@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "Tareas",
+  "short_name": "Tareas",
+  "description": "Organiza tus tareas, fechas de vencimiento e historial.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101829",
+  "theme_color": "#101829",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

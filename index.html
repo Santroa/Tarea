@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#101829" />
+    <meta
+      name="description"
+      content="Organiza tus tareas, fechas de vencimiento e historial desde cualquier dispositivo."
+    />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Tareas</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="m7.5 12.5 3 3 6-7" />
+              <path d="M7 5.5h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z" />
+            </svg>
+          </div>
+          <div class="brand-copy">
+            <h1>Tareas</h1>
+            <p id="page-subtitle">Mis Tareas Activas</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-button theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar tema" title="Cambiar tema">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3v2m0 14v2M5.64 5.64l1.42 1.42m9.88 9.88 1.42 1.42M3 12h2m14 0h2M5.64 18.36l1.42-1.42m9.88-9.88 1.42-1.42" />
+              <circle cx="12" cy="12" r="4" />
+            </svg>
+          </button>
+          <button class="icon-button share-button" id="share-app-button" type="button" aria-label="Compartir aplicación" title="Compartir aplicación">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <path d="m8.7 10.5 6.6-4m-6.6 7 6.6 4" />
+            </svg>
+          </button>
+          <button class="icon-button install-button" id="install-app-button" type="button" aria-label="Instalar aplicación" title="Instalar aplicación">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3v12m0 0 4-4m-4 4-4-4" />
+              <path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
+            </svg>
+          </button>
+          <button class="icon-button add-button" id="add-task-button" type="button" aria-label="Agregar tarea" title="Agregar tarea">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="view-content" aria-live="polite">
+        <div class="toolbar" id="task-toolbar">
+          <label class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.5" />
+              <path d="m16 16 4 4" />
+            </svg>
+            <input id="search-input" type="search" placeholder="Buscar tarea..." autocomplete="off" />
+          </label>
+          <label class="sort-box" id="sort-box">
+            <span class="sr-only">Ordenar tareas</span>
+            <select id="sort-select">
+              <option value="due">Vencimiento</option>
+              <option value="newest">Más recientes</option>
+              <option value="oldest">Más antiguas</option>
+              <option value="alphabetical">Alfabéticamente</option>
+            </select>
+          </label>
+        </div>
+
+        <p class="task-count" id="task-count"></p>
+        <div class="task-list" id="task-list"></div>
+        <div class="empty-state" id="empty-state" hidden>
+          <div class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M8 5h8M8 9h8M8 13h5m-8-9h14a2 2 0 0 1 2 2v13l-4-2-4 2-4-2-4 2V6a2 2 0 0 1 2-2Z" />
+            </svg>
+          </div>
+          <h2 id="empty-title">Todo listo por aquí</h2>
+          <p id="empty-message">Agrega una tarea para empezar a organizarte.</p>
+          <button class="primary-button empty-add-button" id="empty-add-button" type="button">Agregar tarea</button>
+        </div>
+      </section>
+
+      <nav class="bottom-nav" aria-label="Navegación principal">
+        <button class="nav-button active" id="pending-tab" type="button" aria-current="page">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" />
+          </svg>
+          <span>Pendientes</span>
+          <span class="nav-badge" id="pending-badge" hidden></span>
+        </button>
+        <button class="nav-button" id="history-tab" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 12a9 9 0 1 0 2.64-6.36L3 8m0-5v5h5m4-1v5l3 2" />
+          </svg>
+          <span>Historial</span>
+        </button>
+        <button class="nav-button" id="words-tab" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 1 4 17.5v-12Z" />
+            <path d="M4 6h16M8 10h8m-8 4h6" />
+          </svg>
+          <span>Palabras</span>
+        </button>
+        <button class="nav-button" id="calendar-tab" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M16 3v4M8 3v4M3 10h18m2 4H5m7-4v7" />
+          </svg>
+          <span>Materias</span>
+        </button>
+      </nav>
+    </main>
+
+    <dialog class="task-dialog" id="task-dialog">
+      <form class="task-form" id="task-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">ORGANIZA TU DÍA</p>
+            <h2 id="dialog-title">Nueva tarea</h2>
+          </div>
+          <button class="close-button" id="close-dialog" type="button" aria-label="Cerrar">×</button>
+        </div>
+        <label class="form-field">
+          <span>Nombre de la tarea</span>
+          <input id="task-title" name="title" type="text" maxlength="120" placeholder="Ej. Preparar informe" required />
+        </label>
+        <label class="form-field">
+          <span>Descripción <span class="optional">(opcional)</span></span>
+          <textarea id="task-description" name="description" rows="3" maxlength="500" placeholder="Agrega algunos detalles..."></textarea>
+        </label>
+        <label class="form-field">
+          <span>Fecha de vencimiento <span class="optional">(opcional)</span></span>
+          <input id="task-due-date" name="dueDate" type="date" />
+        </label>
+        <label class="form-field">
+          <span>JPG o PDF <span class="optional">(opcional)</span></span>
+          <input id="task-attachment" name="attachment" type="file" accept=".jpg,.jpeg,.pdf,image/jpeg,application/pdf" />
+          <span class="field-hint">Puedes adjuntar un archivo JPG o PDF de hasta 10 MB.</span>
+        </label>
+        <div class="attachment-current" id="task-attachment-current" hidden>
+          <span id="task-attachment-name"></span>
+          <button class="remove-attachment-button" id="remove-task-attachment" type="button">Quitar archivo</button>
+        </div>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+        <div class="dialog-actions">
+          <button class="secondary-button" id="cancel-dialog" type="button">Cancelar</button>
+          <button class="primary-button" type="submit">Guardar tarea</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="task-dialog" id="word-dialog">
+      <form class="task-form" id="word-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">TU DICCIONARIO</p>
+            <h2 id="word-dialog-title">Nueva palabra</h2>
+          </div>
+          <button class="close-button" id="close-word-dialog" type="button" aria-label="Cerrar">×</button>
+        </div>
+        <label class="form-field">
+          <span>Palabra</span>
+          <input id="word-term" name="term" type="text" maxlength="120" placeholder="Ej. Perseverancia" required />
+        </label>
+        <label class="form-field">
+          <span>Definición</span>
+          <textarea id="word-definition" name="definition" rows="4" maxlength="1000" placeholder="Escribe qué significa..." required></textarea>
+        </label>
+        <p class="form-error" id="word-form-error" role="alert" hidden></p>
+        <div class="dialog-actions">
+          <button class="secondary-button" id="cancel-word-dialog" type="button">Cancelar</button>
+          <button class="primary-button" type="submit">Guardar palabra</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="task-dialog" id="subject-dialog">
+      <form class="task-form" id="subject-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">HORARIO SEMANAL</p>
+            <h2 id="subject-dialog-title">Nuevo bloque</h2>
+          </div>
+          <button class="close-button" id="close-subject-dialog" type="button" aria-label="Cerrar">×</button>
+        </div>
+        <label class="form-field">
+          <span>Materia o actividad</span>
+          <input id="subject-name" name="name" type="text" maxlength="120" placeholder="Ej. Matemáticas o Almuerzo" required />
+        </label>
+        <label class="form-field">
+          <span>Día de la semana</span>
+          <select id="subject-day" name="day" required>
+            <option value="1">Lunes</option>
+            <option value="2">Martes</option>
+            <option value="3">Miércoles</option>
+            <option value="4">Jueves</option>
+            <option value="5">Viernes</option>
+          </select>
+        </label>
+        <label class="form-field">
+          <span>Hora de inicio</span>
+          <input id="subject-start-time" name="startTime" type="time" step="300" required />
+        </label>
+        <label class="form-field">
+          <span>Hora de fin</span>
+          <input id="subject-end-time" name="endTime" type="time" step="300" required />
+        </label>
+        <p class="form-error" id="subject-form-error" role="alert" hidden></p>
+        <div class="dialog-actions">
+          <button class="secondary-button" id="cancel-subject-dialog" type="button">Cancelar</button>
+          <button class="primary-button" type="submit">Guardar bloque</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="task-dialog" id="completion-dialog">
+      <form class="task-form" id="completion-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">¡UN LOGRO MÁS!</p>
+            <h2 id="completion-title">Completar tarea</h2>
+          </div>
+          <button class="close-button" id="close-completion-dialog" type="button" aria-label="Cerrar">×</button>
+        </div>
+        <p class="confirm-message">Si quieres, agrega un puntaje y la escala. Ambos campos son opcionales.</p>
+        <label class="form-field">
+          <span>Puntaje obtenido <span class="optional">(opcional)</span></span>
+          <input id="completion-score" name="score" type="number" min="0" step="any" inputmode="decimal" placeholder="Ej. 8" />
+        </label>
+        <label class="form-field">
+          <span>Escala máxima <span class="optional">(opcional)</span></span>
+          <input id="completion-scale" name="scale" type="number" min="0.01" step="any" inputmode="decimal" placeholder="Ej. 10" />
+        </label>
+        <p class="form-error" id="completion-error" role="alert" hidden></p>
+        <div class="dialog-actions completion-actions">
+          <button class="secondary-button" id="complete-without-score" type="button">Sin puntaje</button>
+          <button class="primary-button" type="submit">Guardar y completar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="task-dialog attachment-dialog" id="attachment-dialog">
+      <div class="task-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">ARCHIVO ADJUNTO</p>
+            <h2 class="attachment-dialog-title" id="attachment-dialog-title">Archivo de la tarea</h2>
+          </div>
+          <button class="close-button" id="close-attachment-dialog" type="button" aria-label="Cerrar">×</button>
+        </div>
+        <div class="attachment-preview-content" id="attachment-preview-content"></div>
+      </div>
+    </dialog>
+
+    <dialog class="task-dialog confirm-dialog" id="delete-dialog">
+      <div class="task-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">CONFIRMAR ACCIÓN</p>
+            <h2 id="delete-title">Eliminar tarea</h2>
+          </div>
+          <button class="close-button" id="close-delete-dialog" type="button" aria-label="Cerrar">×</button>
+        </div>
+        <p class="confirm-message" id="delete-message"></p>
+        <div class="dialog-actions">
+          <button class="secondary-button" id="cancel-delete" type="button">Cancelar</button>
+          <button class="primary-button danger-button" id="confirm-delete" type="button">Eliminar</button>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./script.js" defer></script>
+  </body>
+</html>
